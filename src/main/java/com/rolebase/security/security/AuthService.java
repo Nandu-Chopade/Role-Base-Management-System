@@ -2,7 +2,7 @@ package com.rolebase.security.security;
 
 
 
-import com.rolebase.security.jwt.JwtUtil;
+import com.rolebase.security.jwt.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +16,12 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
     }
 
     public String registerUser(User user) {
@@ -33,7 +33,7 @@ public class AuthService {
     public String authenticateUser(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
-            return jwtUtil.generateToken(username);
+            return jwtService.generateToken(username);
         }
         return "Invalid Credentials";
     }

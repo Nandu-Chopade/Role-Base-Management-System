@@ -1,10 +1,9 @@
 package com.rolebase.security.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -26,10 +25,13 @@ public class User {
     private String mobileNumber;
     private String password;
 
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
 
-    @Enumerated(EnumType.STRING) // Store as "ADMIN", "USER", etc.
+    @Enumerated(EnumType.STRING)
     private Role role;
+
+    // ✅ Fields for password reset
+    private String resetToken;
+    private LocalDateTime tokenExpiry;
 }
